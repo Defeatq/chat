@@ -108,18 +108,21 @@ body {
   display: flex;
   justify-content: space-between;
 }
-.chat__display {
+.chat__wrapper {
   margin: 8px 0;
+  max-width: 100%;
+  height: 440px;
+  overflow: visible auto;
+  border: 1px solid #000000;
+}
+.chat__display {
   padding: 4px 8px;
-  min-height: 440px;
-  max-height: 440px;
+  min-height: 100%;
   max-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: baseline;
-  overflow: visible auto;
-  border: 1px solid #000000;
 }
 .chat__post {
   min-height: 32px;
@@ -130,6 +133,7 @@ body {
   padding: 6px 8px;
   margin: 4px 0;
   display: inline-block;
+  word-break: break-all;
   background-color: #E5E5E5;
 }
 .message__text {
