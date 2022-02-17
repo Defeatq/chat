@@ -79,7 +79,7 @@ body {
   top: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: #535353;
   height: 100vh;
   width: 100%;
   opacity: 0;
@@ -221,6 +221,26 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.auth {
+  margin-top: 50px;
+}
+.auth__form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.auth__setting {
+  padding: 6px 8px;
+  margin: 7px 0;
+  height: 32px;
+  width: 100%;
+  outline: none;
+  border: 1px solid #000000;
+}
+.auth__submit {
+  background-color: #FFFFFF;
 }
 
 .overlay-visible {
