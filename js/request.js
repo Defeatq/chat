@@ -11,3 +11,27 @@ export async function requestEmail(email) {
 
   return response
 }
+
+export async function requestName(token, name) {
+  const response = await fetch(URLS.USER_CONFIRM, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({name: `${name}`})
+  });
+
+  return response
+}
+
+export async function requestUser(token) {
+  const response = await fetch(URLS.USER_ME, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  return response
+}

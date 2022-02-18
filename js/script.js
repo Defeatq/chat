@@ -1,6 +1,7 @@
-import { UI_ELEMENTS, renderMessage, renderAuth } from './view.js';
-import { requestEmail } from './request.js';
-console.log(UI_ELEMENTS.CONFIRM.CONFIRM_FORM)
+import { UI_ELEMENTS, renderMessage, renderAuth, renderConfirm } from './view.js';
+import { requestEmail, requestName, requestUser } from './request.js';
+import Cookies from 'js-cookie';
+
 UI_ELEMENTS.MESSAGE_FORM.addEventListener('submit', event => {
   event.preventDefault();
 
@@ -26,5 +27,22 @@ UI_ELEMENTS.AUTH.AUTHENTIFICATION_FORM.addEventListener('submit', event => {
 UI_ELEMENTS.CONFIRM.CONFIRM_FORM.addEventListener('submit', event => {
   event.preventDefault();
 
+  const token = UI_ELEMENTS.CONFIRM.CONFIRM_FORM.querySelector('.auth__setting').value;
+
+  Cookies.set('token', token);
+  renderConfirm();
+  
   UI_ELEMENTS.CONFIRM.CONFIRM_FORM.reset();
+});
+
+UI_ELEMENTS.NAME_EDIT_FORM.addEventListener('submit', event => {
+  event.preventDefault();
+
+  const name = UI_ELEMENTS.NAME_EDIT_FORM.querySelector('.parameter__nickname__setting').value;
+  
+  requestName(Cookies.get('token'), name)
+    .then(() => {
+      UI_ELEMENTS.NAME_EDIT_FORM.reset();
+    })
+    .catch(alert)
 })
