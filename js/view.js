@@ -16,6 +16,7 @@ export const UI_ELEMENTS = {
     CONFIRM_FORM: document.querySelector('#confirm'),
     CONFIRM_MODAL: document.querySelector('[data-target="confirm"]'),
   },
+  PRELOADER: document.querySelector('.preloader'),
 }
 
 export function renderMessage(value) {

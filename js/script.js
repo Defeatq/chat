@@ -1,12 +1,18 @@
 import { UI_ELEMENTS, renderMessage, renderAuth, renderConfirm } from './view.js';
 import { requestEmail, requestName, requestUser } from './request.js';
+import { checkValidToken } from './auth.js';
 import Cookies from 'js-cookie';
+
+checkValidToken(() => {
+  renderAuth();
+  renderConfirm();
+});
 
 UI_ELEMENTS.MESSAGE_FORM.addEventListener('submit', event => {
   event.preventDefault();
 
-  const messageValue = document.querySelector('.post__message').value;
-  renderMessage(messageValue);
+  const messageText = document.querySelector('.post__message').value;
+  renderMessage(messageText);
 
   UI_ELEMENTS.MESSAGE_FORM.reset();
 });
@@ -28,11 +34,12 @@ UI_ELEMENTS.CONFIRM.CONFIRM_FORM.addEventListener('submit', event => {
   event.preventDefault();
 
   const token = UI_ELEMENTS.CONFIRM.CONFIRM_FORM.querySelector('.auth__setting').value;
+  Cookies.set('token', token)
 
-  Cookies.set('token', token);
-  renderConfirm();
-  
-  UI_ELEMENTS.CONFIRM.CONFIRM_FORM.reset();
+  checkValidToken(() => {
+    renderConfirm();
+    UI_ELEMENTS.CONFIRM.CONFIRM_FORM.reset();
+  })
 });
 
 UI_ELEMENTS.NAME_EDIT_FORM.addEventListener('submit', event => {
