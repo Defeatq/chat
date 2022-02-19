@@ -39,7 +39,7 @@ UI_ELEMENTS.CONFIRM.CONFIRM_FORM.addEventListener('submit', event => {
   checkValidToken(() => {
     renderConfirm();
     UI_ELEMENTS.CONFIRM.CONFIRM_FORM.reset();
-  })
+  }, alert)
 });
 
 UI_ELEMENTS.NAME_EDIT_FORM.addEventListener('submit', event => {

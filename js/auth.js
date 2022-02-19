@@ -1,8 +1,9 @@
 import { requestUser } from './request.js';
 import Cookies from 'js-cookie';
 
-export function checkValidToken(callback) {
-  requestUser(Cookies.get('token'))
+export function checkValidToken(callback, errorHandler) {
+  if (Cookies.get('token')) {
+    requestUser(Cookies.get('token'))
     .then(response => response.json())
     .then(userData => {
       const isCodeValid = userData.token === Cookies.get('token');
@@ -13,5 +14,6 @@ export function checkValidToken(callback) {
         throw new Error('Invalid code');
       }
     })
-    .catch(alert);
+    .catch(errorHandler)
+  }
 }
