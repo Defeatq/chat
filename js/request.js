@@ -1,3 +1,6 @@
+import Cookies from "js-cookie";
+import { URLS } from "./urls.js";
+
 export async function request(method, url, token, body) {
   try {
     const response = await fetch(url, {
@@ -13,4 +16,11 @@ export async function request(method, url, token, body) {
   } catch(error) {
     throw new Error(error)
   }
+}
+
+export async function requestForMessages(onSucces, onError) {
+  request('GET', `${URLS.API_KEY}/messages`, Cookies.get('token'))
+    .then(response => response.json())
+    .then(onSucces)
+    .catch(onError);
 }

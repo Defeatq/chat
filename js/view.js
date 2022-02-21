@@ -6,6 +6,7 @@ export const UI_ELEMENTS = {
   MESSAGE_FORM: document.querySelector('.chat__post'),
   CHAT_DISPLAY: document.querySelector('.chat__display'),
   MAIN_MESSAGE_TEMPLATE: document.querySelector('.main-template'),
+  OTHER_MESSAGE_TEMPLATE: document.querySelector('.other-template'),
   OUTER_CHAT: document.querySelector('.chat__wrapper'),
   NAME_EDIT_FORM: document.querySelector('#name-edit'),
   AUTH: {
@@ -19,14 +20,14 @@ export const UI_ELEMENTS = {
   PRELOADER: document.querySelector('.preloader'),
 }
 
-export function renderMessage(value) {
+export function renderMainMessage(text, time = new Date()) {
   const message = UI_ELEMENTS.MAIN_MESSAGE_TEMPLATE.content.cloneNode(true);
-  message.querySelector('.message__text').textContent = `Я: ${value}`;
-  message.querySelector('.message__time').textContent = format(new Date(), 'HH:mm');
+  renderMessage(message, text, 'Я', time);
+}
 
-  UI_ELEMENTS.CHAT_DISPLAY.append(message);
-
-  UI_ELEMENTS.OUTER_CHAT.scrollTop = UI_ELEMENTS.OUTER_CHAT.scrollHeight - UI_ELEMENTS.OUTER_CHAT.clientHeight;
+export function renderOtherMessage(text, from, time) {
+  const message = UI_ELEMENTS.OTHER_MESSAGE_TEMPLATE.content.cloneNode(true);
+  renderMessage(message, text, from, time);
 }
 
 export function renderAuth() {
@@ -36,4 +37,12 @@ export function renderAuth() {
 
 export function renderConfirm() {
   UI_ELEMENTS.CONFIRM.CONFIRM_MODAL.classList.remove('overlay-visible');
+}
+
+function renderMessage(template, text, from, creationTime) {
+  template.querySelector('.message__text').textContent = `${from}: ${text}`;
+  template.querySelector('.message__time').textContent = format(creationTime, 'HH:mm');
+
+  UI_ELEMENTS.CHAT_DISPLAY.append(template);
+  UI_ELEMENTS.OUTER_CHAT.scrollTop = UI_ELEMENTS.OUTER_CHAT.scrollHeight - UI_ELEMENTS.OUTER_CHAT.clientHeight;
 }

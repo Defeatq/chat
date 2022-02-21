@@ -1,5 +1,5 @@
-import { UI_ELEMENTS, renderMessage, renderAuth, renderConfirm } from './view.js';
-import { request } from './request.js';
+import { UI_ELEMENTS, renderMainMessage, renderOtherMessage, renderAuth, renderConfirm, renderOtherMessage } from './view.js';
+import { request, requestForMessages } from './request.js';
 import { checkValidToken } from './auth.js'
 import { URLS } from './urls.js';
 import Cookies from 'js-cookie';
@@ -9,11 +9,19 @@ checkValidToken(() => {
   renderConfirm();
 });
 
+requestForMessages(messages => {
+  messages.messages.forEach(messageData => {
+    const {message, username, createdAt: time} = messageData;
+
+    renderOtherMessage(message, username, new Date(time));
+  });
+});
+
 UI_ELEMENTS.MESSAGE_FORM.addEventListener('submit', event => {
   event.preventDefault();
 
   const messageText = document.querySelector('.post__message').value;
-  renderMessage(messageText);
+  renderMainMessage(messageText);
 
   UI_ELEMENTS.MESSAGE_FORM.reset();
 });
