@@ -3,11 +3,7 @@ import { request, requestForMessages } from './request.js';
 import { checkValidToken } from './auth.js'
 import { URLS } from './urls.js';
 import Cookies from 'js-cookie';
-
-checkValidToken(() => {
-  renderAuth();
-  renderConfirm();
-});
+import { listeningSocket, sendSocketData } from './socket.js';
 
 requestForMessages(messages => {
   messages.messages.forEach(messageData => {
@@ -17,10 +13,21 @@ requestForMessages(messages => {
   });
 });
 
+checkValidToken(() => {
+  renderAuth();
+  renderConfirm();
+});
+
+listeningSocket();
+
 UI_ELEMENTS.MESSAGE_FORM.addEventListener('submit', event => {
   event.preventDefault();
 
   const messageText = document.querySelector('.post__message').value;
+
+  sendSocketData(JSON.stringify({
+    text: messageText,
+  }));
   renderMainMessage(messageText);
 
   UI_ELEMENTS.MESSAGE_FORM.reset();
