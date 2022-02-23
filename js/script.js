@@ -5,17 +5,22 @@ import { URLS } from './urls.js';
 import Cookies from 'js-cookie';
 import { listeningSocket, sendSocketData } from './socket.js';
 
-requestForMessages(messages => {
-  messages.messages.forEach(messageData => {
-    const {message, username, createdAt: time} = messageData;
-
-    renderOtherMessage(message, username, new Date(time));
-  });
-});
-
 checkValidToken(() => {
   renderAuth();
   renderConfirm();
+});
+
+requestForMessages(messages => {
+  messages.messages.forEach(messageData => {
+    const {text, user, createdAt: time} = messageData;
+    const isMainEmail = Cookies.get('email') === user.email;
+
+    if (isMainEmail) {
+      renderMainMessage(text, new Date(time));
+    } else {
+      renderOtherMessage(text, user.name, new Date(time));
+    }
+  });
 });
 
 listeningSocket();

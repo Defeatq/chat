@@ -10,6 +10,7 @@ export function checkValidToken(onSucces, onError) {
         const isCodeValid = userData.token === Cookies.get('token');
 
         if (isCodeValid) {
+          Cookies.set('email', userData.email);
           onSucces(userData);
         } else {
           throw new Error('Invalid code');

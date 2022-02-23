@@ -8,11 +8,11 @@ export const socket = new WebSocket(`${URLS.SOCKET}?${Cookies.get('token')}`);
 export function listeningSocket() {
   try {
     socket.onmessage = function(event) {
-      const {text: message, user, createdAt: time} = JSON.parse(event.data);
+      const {text, user, createdAt: time} = JSON.parse(event.data);
 
       checkValidToken(data => {
         if (user.email !== data.email) {
-          renderOtherMessage(message, user.name, new Date(time));
+          renderOtherMessage(text, user.name, new Date(time));
         }
       })
     };
