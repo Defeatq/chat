@@ -37,7 +37,7 @@ requestForMessages(messages => {
   UI_ELEMENTS.OUTER_CHAT.scrollTop = UI_ELEMENTS.OUTER_CHAT.scrollHeight;
 });
 
-listeningSocket();
+startListeningSocket();
 
 UI_ELEMENTS.MESSAGE_FORM.addEventListener('submit', event => {
   event.preventDefault();

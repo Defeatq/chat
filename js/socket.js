@@ -5,7 +5,7 @@ import { renderOtherMessage } from "./view.js";
 
 export const socket = new WebSocket(`${URLS.SOCKET}?${Cookies.get('token')}`);
 
-export function listeningSocket() {
+export function startListeningSocket() {
   try {
     socket.onmessage = function(event) {
       const {text, user, createdAt: time} = JSON.parse(event.data);
