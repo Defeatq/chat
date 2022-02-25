@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import Cookies from 'js-cookie';
 
 export const UI_ELEMENTS = {
   MODALS: document.querySelectorAll('.overlay'),
@@ -20,14 +21,14 @@ export const UI_ELEMENTS = {
   PRELOADER: document.querySelector('.preloader'),
 }
 
-export function renderMainMessage(text, time = new Date()) {
+export function renderMainMessage(text, time = new Date(), method) {
   const message = UI_ELEMENTS.MAIN_MESSAGE_TEMPLATE.content.cloneNode(true);
-  renderMessage(message, text, 'Я', time);
+  renderMessage(message, text, 'Я', time, method);
 }
 
-export function renderOtherMessage(text, from, time) {
+export function renderOtherMessage(text, from, time, method) {
   const message = UI_ELEMENTS.OTHER_MESSAGE_TEMPLATE.content.cloneNode(true);
-  renderMessage(message, text, from, time);
+  renderMessage(message, text, from, time, method);
 }
 
 export function renderAuth() {
@@ -39,10 +40,22 @@ export function renderConfirm() {
   UI_ELEMENTS.CONFIRM.CONFIRM_MODAL.classList.remove('overlay-visible');
 }
 
-function renderMessage(template, text, from, creationTime) {
+export function renderMessagesInRange(from, to, messages) {
+  for (let i = from; i > to; i--) {
+    const {text, user, createdAt: time} = messages[i];
+    const isMainEmail = Cookies.get('email') === user.email;
+
+    if (isMainEmail) {
+      renderMainMessage(text, new Date(time), 'prepend');
+    } else {
+      renderOtherMessage(text, user.name, new Date(time), 'prepend');
+    }
+  }
+}
+
+function renderMessage(template, text, from, creationTime, method = 'append') {
   template.querySelector('.message__text').textContent = `${from}: ${text}`;
   template.querySelector('.message__time').textContent = format(creationTime, 'HH:mm');
 
-  UI_ELEMENTS.CHAT_DISPLAY.append(template);
-  UI_ELEMENTS.OUTER_CHAT.scrollTop = UI_ELEMENTS.OUTER_CHAT.scrollHeight - UI_ELEMENTS.OUTER_CHAT.clientHeight;
+  UI_ELEMENTS.CHAT_DISPLAY[method](template);
 }

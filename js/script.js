@@ -1,4 +1,4 @@
-import { UI_ELEMENTS, renderMainMessage, renderOtherMessage, renderAuth, renderConfirm, renderOtherMessage } from './view.js';
+import { UI_ELEMENTS, renderMainMessage, renderOtherMessage, renderAuth, renderConfirm, renderOtherMessage, renderMessagesInRange } from './view.js';
 import { request, requestForMessages } from './request.js';
 import { checkValidToken } from './auth.js'
 import { URLS } from './urls.js';
@@ -10,17 +10,31 @@ checkValidToken(() => {
   renderConfirm();
 });
 
-requestForMessages(messages => {
-  messages.messages.forEach(messageData => {
-    const {text, user, createdAt: time} = messageData;
-    const isMainEmail = Cookies.get('email') === user.email;
+UI_ELEMENTS.OUTER_CHAT.addEventListener('scroll', event => {
+  const isStart = event.target.scrollTop === 0;
+  const currentState = JSON.parse(localStorage.getItem('currentState'));
+  const prevScrollHeight = event.target.scrollHeight;
 
-    if (isMainEmail) {
-      renderMainMessage(text, new Date(time));
-    } else {
-      renderOtherMessage(text, user.name, new Date(time));
-    }
-  });
+  if (isStart) {
+    localStorage.setItem('currentState', currentState + 20);
+
+    const newState = JSON.parse(localStorage.getItem('currentState'));
+    const messages = JSON.parse(localStorage.getItem('messages')).messages;
+
+    renderMessagesInRange(messages.length - currentState, messages.length - newState, messages);
+    event.target.scrollTop = event.target.scrollHeight - prevScrollHeight;
+  }
+});
+
+requestForMessages(messages => {
+  localStorage.setItem('messages', JSON.stringify(messages));
+  localStorage.setItem('currentState', 20);
+
+  const _messages = JSON.parse(localStorage.getItem('messages')).messages;
+  const currentState = JSON.parse(localStorage.getItem('currentState'));
+
+  renderMessagesInRange(_messages.length - 1, _messages.length - currentState, _messages);
+  UI_ELEMENTS.OUTER_CHAT.scrollTop = UI_ELEMENTS.OUTER_CHAT.scrollHeight;
 });
 
 listeningSocket();
@@ -34,6 +48,7 @@ UI_ELEMENTS.MESSAGE_FORM.addEventListener('submit', event => {
     text: messageText,
   }));
   renderMainMessage(messageText);
+  UI_ELEMENTS.OUTER_CHAT.scrollTop = UI_ELEMENTS.OUTER_CHAT.scrollHeight - UI_ELEMENTS.OUTER_CHAT.clientHeight;
 
   UI_ELEMENTS.MESSAGE_FORM.reset();
 });
