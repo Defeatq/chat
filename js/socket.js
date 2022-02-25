@@ -10,11 +10,9 @@ export function listeningSocket() {
     socket.onmessage = function(event) {
       const {text, user, createdAt: time} = JSON.parse(event.data);
 
-      checkValidToken(data => {
-        if (user.email !== data.email) {
-          renderOtherMessage(text, user.name, new Date(time));
-        }
-      })
+      if (Cookies.get('email') !== user.email) {
+        renderOtherMessage(text, user.name, new Date(time));
+      }
     };
   } catch(error) {
     throw new Error(error);
