@@ -3,7 +3,7 @@ import { request, requestForMessages } from './request.js';
 import { checkValidToken } from './auth.js'
 import { URLS } from './urls.js';
 import Cookies from 'js-cookie';
-import { listeningSocket, sendSocketData } from './socket.js';
+import { startListeningSocket, sendSocketData } from './socket.js';
 
 checkValidToken(() => {
   renderAuth();
